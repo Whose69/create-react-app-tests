@@ -11,6 +11,9 @@ export class Board extends React.Component {
     );
   }
 
+  // onChange(e) {
+  //   console.log(e.target.value);
+  // }
   render() {
     return (
       <div>
@@ -29,6 +32,16 @@ export class Board extends React.Component {
           {this.renderSquare(7)}
           {this.renderSquare(8)}
         </div>
+
+        <form onSubmit={this.props.onSubmit}>
+          <input
+            type="text"
+            placeholder="Type your name here"
+            value={this.props.value}
+            onChange={this.props.onChange.bind(this)}
+          />
+          <button>Submit!</button>
+        </form>
       </div>
     );
   }

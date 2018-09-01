@@ -4,18 +4,17 @@ import { Board } from "./components/Board";
 import "./index.css";
 
 class Game extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      history: [
-        {
-          squares: Array(9).fill(null)
-        }
-      ],
-      xIsNext: true,
-      stepNumber: 0
-    };
-  }
+  state = {
+    history: [
+      {
+        squares: Array(9).fill(null)
+      }
+    ],
+    xIsNext: true,
+    stepNumber: 0,
+    inputField: "",
+    playerName: ""
+  };
 
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
@@ -36,6 +35,11 @@ class Game extends React.Component {
     });
   }
 
+  handleChange = e => {
+    const inputValue = e.target.value;
+    this.setState({ inputField: inputValue });
+  };
+
   jumpTo(step) {
     this.setState({
       stepNumber: step,
@@ -43,7 +47,17 @@ class Game extends React.Component {
     });
   }
 
+  submitHandler = () => {
+    const newPlayerName = this.state.inputField;
+    this.setState({
+      playerName: newPlayerName
+    });
+  };
+
   render() {
+    const activePlayer = this.state.playerName
+      ? `${this.state.playerName} is playing`
+      : "Enter your name in the name input field!";
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
@@ -66,11 +80,18 @@ class Game extends React.Component {
     return (
       <div className="game">
         <div className="game-board">
-          <Board squares={current.squares} onClick={i => this.handleClick(i)} />
+          <Board
+            squares={current.squares}
+            onClick={i => this.handleClick(i)}
+            value={this.state.inputField}
+            onChange={this.handleChange}
+            onSubmit={this.submitHandler}
+          />
         </div>
         <div className="game-info">
           <div>{status}</div>
           <ol>{moves}</ol>
+          <div>{activePlayer}</div>
         </div>
       </div>
     );
